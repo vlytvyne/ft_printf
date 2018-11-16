@@ -71,6 +71,76 @@ t_form	parse(const char **format)
 	return (form);
 }
 
+void	zero_manager(t_form form, char **src, char *new_str, int srclen)
+{
+	int i;
+
+	i = 0;
+	if (ft_strchr("dif", form.type))
+	{
+		if (form.plus || form.space)
+		{
+			if (form.plus)
+				new_str[i++] = '+';
+			else if (form.space)
+				new_str[i++] = ' ';
+			while (i < form.width - srclen + 1)
+			{
+				new_str[i] = '0';
+				i++;
+			}
+			ft_strcpy(&new_str[i], (*src + 1));
+		}
+		else
+		{
+			while (i < form.width - srclen)
+			{
+				new_str[i] = '0';
+				i++;
+			}
+			ft_strcpy(&new_str[i], *src);
+		}
+		free(*src);
+		*src = new_str;
+	}
+	else if ((form.type == 'x' || form.type == 'X'))
+	{
+		if (form.hash)
+		{
+			new_str[i++] = '0';
+			new_str[i++] = 'x';
+			while (i < form.width - srclen + 2)
+			{
+				new_str[i] = '0';
+				i++;
+			}
+			ft_strcpy(&new_str[i], (*src + 2));
+		}
+		else
+		{
+			while (i < form.width - srclen)
+			{
+				new_str[i] = '0';
+				i++;
+			}
+			ft_strcpy(&new_str[i], *src);
+		}
+		free(*src);
+		*src = new_str;
+	}
+	else if (form.type == 'u' || form.type == 'o')
+	{
+		while (i < form.width - srclen)
+		{
+			new_str[i] = '0';
+			i++;
+		}
+		ft_strcpy(&new_str[i], *src);
+		free(*src);
+		*src = new_str;
+	}
+}
+
 void	width_manager(t_form form, char **src)
 {//обрабатывает с минусом
 	int		srclen;
@@ -89,17 +159,24 @@ void	width_manager(t_form form, char **src)
 		ft_strcpy(new_str, *src);
 		while (srclen < width)
 			new_str[srclen++] = ' ';
+		free(*src);
+		*src = new_str;
 	}
 	else
 	{
-		cpy_from = width - srclen;
-		ft_strcpy(new_str + cpy_from, *src);
-		i = 0;
-		while (i < cpy_from)
-			new_str[i++] = ' ';
+		if (ft_strchr("diouxXf", form.type) && form.zero && (!form.precision_set || form.type == 'f'))
+			zero_manager(form, src, new_str, srclen);
+		else
+		{
+			cpy_from = width - srclen;
+			ft_strcpy(new_str + cpy_from, *src);
+			i = 0;
+			while (i < cpy_from)
+				new_str[i++] = ' ';
+			free(*src);
+			*src = new_str;
+		}
 	}
-	free(*src);
-	*src = new_str;
 }
 
 void	precision_manager(t_form form, char **src)
@@ -153,16 +230,19 @@ void	hash_manager(t_form form, char **src)
 	char *new_str;
 
 	new_str = NULL;
-	if (form.type == 'o')
-		new_str = ft_strjoin("0", *src);
-	else if (form.type == 'x' || form.type == 'X')
-		new_str = ft_strjoin("0x", *src);
-	else if (form.type == 'f' && form.precision_set && form.precision == 0)
-		new_str = ft_strjoin(*src, ".");
-	if (new_str != NULL)
+	if (form.hash)
 	{
-		free(*src);
-		*src = new_str;
+		if (form.type == 'o')
+			new_str = ft_strjoin("0", *src);
+		else if (form.type == 'x' || form.type == 'X')
+			new_str = ft_strjoin("0x", *src);
+		else if (form.type == 'f' && form.precision_set && form.precision == 0)
+			new_str = ft_strjoin(*src, ".");
+		if (new_str != NULL)
+		{
+			free(*src);
+			*src = new_str;
+		}
 	}
 }
 

@@ -17,6 +17,6 @@
 int		main(void)
 {
 	char *po = malloc(10);
-	ft_printf("%#010.7x\n", 0xAFE);
-	printf("%#010.7x\n", 0xAFE);
+	ft_printf("% 010d\n", 1);
+	printf("% 010d\n", 1);
 }
