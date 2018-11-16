@@ -6,7 +6,7 @@
 /*   By: vlytvyne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 12:51:55 by vlytvyne          #+#    #+#             */
-/*   Updated: 2018/10/24 13:04:43 by vlytvyne         ###   ########.fr       */
+/*   Updated: 2018/11/16 15:35:40 by vlytvyne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIBFT_H
 
 # include <string.h>
+# include <stdlib.h>
 # include <limits.h>
 
 typedef struct		s_list
@@ -86,11 +87,13 @@ void				ft_lstadd(t_list **alst, t_list *new);
 void				ft_lstiter(t_list *lst, void (*f)(t_list*));
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list*));
 
+int					power(int num, int pow);
 char				*strrev(char *str);
 int					is_whitespace(char c);
 void				lst_add_end(t_list *root, t_list *new);
 int					get_abs(int num);
 char				*itoa_base(long long int num, int base);
-int					count_digits_base(long long int num, int base);
+char				*uitoa_base(unsigned long long int num, int base);
+char				*ftoa(long double num, unsigned int precision);
 
 #endif

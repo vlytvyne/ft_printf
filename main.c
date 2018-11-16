@@ -6,18 +6,17 @@
 /*   By: vlytvyne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/13 16:03:51 by vlytvyne          #+#    #+#             */
-/*   Updated: 2018/11/13 16:24:27 by vlytvyne         ###   ########.fr       */
+/*   Updated: 2018/11/13 19:26:05 by vlytvyne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "header.h"
-#define ARGS "Artur idet w shkolu\n"
+#include "libft.h"
 
 int		main(void)
 {
-	printf("Printf:\n");
-	printf(ARGS);
-	printf("FT_printf:\n");
-	ft_printf(ARGS);
+	char *po = malloc(10);
+	ft_printf("%#010.7x\n", 0xAFE);
+	printf("%#010.7x\n", 0xAFE);
 }

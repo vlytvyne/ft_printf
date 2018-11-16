@@ -14,6 +14,8 @@
 # define HEADER_H
 
 #include <stdio.h>
+#include <stdarg.h>
+#include <stdlib.h>
 
 # define CONVERSIONS "cspdiouxXf"
 # define FLAGS "hlL#0-+ "
@@ -30,6 +32,7 @@ typedef struct		s_form
 	unsigned int	h:1;
 	unsigned int	hh:1;
 	unsigned int	upper_l:1;
+	unsigned int	precision_set:1;
 	unsigned int	width;
 	unsigned int	precision;
 	char			type;
