@@ -13,48 +13,47 @@
 #include "libft.h"
 #include "header.h"
 
+void	set_flag(const char **format, t_form *form)
+{
+	if (**format == '#')
+		form->hash = 1;
+	else if (**format == '0' && !form->precision_set)
+		form->zero = 1;
+	else if (**format == '-')
+		form->minus = 1;
+	else if (**format == '+')
+		form->plus = 1;
+	else if (**format == ' ')
+		form->space = 1;
+	else if (**format == 'L')
+		form->upper_l = 1;
+	else if (**format == 'l')
+	{
+		form->ll = (*(*format + 1) == 'l' ? 1 : 0);
+		form->l = 1;
+	}
+	else if (**format == 'h')
+	{
+		form->hh = (*(*format + 1) == 'h' ? 1 : 0);
+		form->h = 1;
+	}
+}
+
 t_form	parse(const char **format)
 {
 	t_form	form;
 
 	form = (t_form){0};
 	while (**format)
-	{//!!!pointer stays on conversion char
-		if (ft_strchr(CONVERSIONS, **format))
+	{
+		if (ft_isalpha(**format))
 		{
 			form.type = **format;
-			return(form);
+			return (form);
 		}
-		if (ft_strchr(FLAGS, **format))
-		{
-			if (**format == '#')
-				form.hash = 1;
-			else if (**format == '0' && !form.precision_set)
-				form.zero = 1;
-			else if (**format == '-')
-				form.minus = 1;
-			else if (**format == '+')
-				form.plus = 1;
-			else if (**format == ' ')
-				form.space = 1;
-			else if (**format == 'L')
-				form.upper_l = 1;
-			else if (**format == 'l')
-			{//можно всунуть тернарники
-				if (*(*format + 1) == 'l')
-					form.ll = 1;
-				else
-					form.l = 1;
-			}
-			else if (**format == 'h')
-			{
-				if (*(*format + 1) == 'h')
-					form.hh = 1;
-				else
-					form.h = 1;
-			}
-		}
-		if (ft_isdigit(**format))
+		else if (ft_strchr(FLAGS, **format))
+			set_flag(format, &form);
+		else if (ft_isdigit(**format))
 		{
 			if (!form.precision_set)
 				form.width = ft_atoi(*format);
@@ -64,7 +63,7 @@ t_form	parse(const char **format)
 				(*format)++;
 			(*format)--;
 		}
-		if (**format == '.')
+		else if (**format == '.')
 			form.precision_set = 1;
 		(*format)++;
 	}
@@ -78,9 +77,11 @@ void	zero_manager(t_form form, char **src, char *new_str, int srclen)
 	i = 0;
 	if (ft_strchr("dif", form.type))
 	{
-		if (form.plus || form.space)
+		if (form.plus || form.space || **src == '-')
 		{
-			if (form.plus)
+			if (**src == '-')
+				new_str[i++] = '-';
+			else if (form.plus)
 				new_str[i++] = '+';
 			else if (form.space)
 				new_str[i++] = ' ';
@@ -142,7 +143,7 @@ void	zero_manager(t_form form, char **src, char *new_str, int srclen)
 }
 
 void	width_manager(t_form form, char **src)
-{//обрабатывает с минусом
+{
 	int		srclen;
 	int		cpy_from;
 	int		i;
@@ -189,23 +190,40 @@ void	precision_manager(t_form form, char **src)
 	{
 		if (form.precision_set && form.precision < ft_strlen(*src))
 		{
-			to_free = *src;		
+			to_free = *src;
 			*src = ft_strsub(*src, 0, form.precision);
 			free(to_free);
 		}
 	}
 	else if (ft_strchr("diouxX", form.type))
 	{
-		size = form.precision - ft_strlen(*src);
-		if (size <= 0)
-			return ;
-		to_free = ft_strnew(size);
-		while (--size >= 0)
-			to_free[size] = '0';
-		new_str = ft_strjoin(to_free, *src);
-		free(*src);
-		free(to_free);
-		*src = new_str;
+		if (**src != '-')
+		{
+			size = form.precision - ft_strlen(*src);
+			if (size <= 0)
+				return ;
+			to_free = ft_strnew(size);
+			while (--size >= 0)
+				to_free[size] = '0';
+			new_str = ft_strjoin(to_free, *src);
+			free(*src);
+			free(to_free);
+			*src = new_str;
+		}
+		else
+		{
+			size = form.precision - ft_strlen(*src) + 2;
+			if (size <= 0)
+				return ;
+			to_free = ft_strnew(size);
+			to_free[0] = '-';
+			while (--size >= 1)
+				to_free[size] = '0';
+			new_str = ft_strjoin(to_free, (*src + 1));
+			free(*src);
+			free(to_free);
+			*src = new_str;
+		}
 	}
 }
 
@@ -214,7 +232,7 @@ void	plus_space_manager(t_form form, char **src)
 	char *new_str;
 	char ch;
 
-	if (ft_strchr("dif", form.type) && (form.space || form.plus))
+	if (ft_strchr("dif", form.type) && (form.space || form.plus) && **src != '-')
 	{
 		if (form.plus)
 			new_str = ft_strjoin("+", *src);
@@ -234,8 +252,10 @@ void	hash_manager(t_form form, char **src)
 	{
 		if (form.type == 'o')
 			new_str = ft_strjoin("0", *src);
-		else if (form.type == 'x' || form.type == 'X')
+		else if (form.type == 'x')
 			new_str = ft_strjoin("0x", *src);
+		else if (form.type == 'X')
+			new_str = ft_strjoin("0X", *src);
 		else if (form.type == 'f' && form.precision_set && form.precision == 0)
 			new_str = ft_strjoin(*src, ".");
 		if (new_str != NULL)
@@ -248,7 +268,7 @@ void	hash_manager(t_form form, char **src)
 
 char	*get_pointer_str(va_list args)
 {
-	int 	i;
+	int		i;
 	int		size;
 	char	*tmp;
 	char	*result;
@@ -306,9 +326,11 @@ char	*get_num_str(t_form form, va_list args)
 	else if (form.type == 'f')
 	{
 		if (form.upper_l)
-			result = ftoa(va_arg(args, long double), form.precision);
+			result = ftoa(va_arg(args, long double),
+				form.precision_set ? form.precision : 6);
 		else
-			result = ftoa(va_arg(args, double), form.precision);
+			result = ftoa(va_arg(args, double),
+				form.precision_set ? form.precision : 6);
 	}
 	if (form.type == 'x')
 	{
@@ -318,15 +340,25 @@ char	*get_num_str(t_form form, va_list args)
 			result[i] = ft_tolower(result[i]);
 			i++;
 		}
-
 	}
 	return (result);
+}
+
+void	run_managers(t_form form, char **result)
+{
+	precision_manager(form, result);
+	plus_space_manager(form, result);
+	hash_manager(form, result);
+	width_manager(form, result);
 }
 
 int		dispatcher(t_form form, va_list args)
 {
 	char	*result;
+	int		printed;
 
+	if (!ft_strchr(CONVERSIONS, form.type))
+		return (0);
 	if (form.type == 'c')
 	{
 		result = ft_strnew(1);
@@ -342,38 +374,36 @@ int		dispatcher(t_form form, va_list args)
 		result = get_pointer_str(args);
 	else if (ft_strchr("diouxXf", form.type))
 		result = get_num_str(form, args);
-	precision_manager(form, &result);
-	plus_space_manager(form, &result);
-	hash_manager(form, &result);
-	width_manager(form, &result);
+	run_managers(form, &result);
 	ft_putstr(result);
-	return (ft_strlen(result));
+	printed = ft_strlen(result);
+	free(result);
+	return (printed);
+}
+
+void	print_and_move(const char ch, int *printed)
+{
+	ft_putchar(ch);
+	(*printed)++;
 }
 
 int		ft_printf(const char *format, ...)
 {
 	va_list	args;
 	t_form	form;
-	char	*str;
 	int		printed;
 
 	printed = 0;
-    va_start(args, format);
-    while (*format)
+	va_start(args, format);
+	while (*format)
 	{
 		if (*format != '%')
-		{
-			ft_putchar(*format);
-			printed++;
-		}
+			print_and_move(*format, &printed);
 		else
 		{
 			format++;
 			if (*format == '%')
-			{
-				ft_putchar('%');
-				printed++;
-			}
+				print_and_move('%', &printed);
 			else
 			{
 				form = parse(&format);
