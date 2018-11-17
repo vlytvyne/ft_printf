@@ -38,5 +38,13 @@ typedef struct		s_form
 }					t_form;
 
 int					ft_printf(const char *format, ...);
+t_form				parse(const char **format);
+char				*get_num_str(t_form form, va_list args);
+void				precision_manager(t_form form, char **src);
+void				width_manager(t_form form, char **src);
+void				hash_manager(t_form form, char **src);
+void				plus_space_manager(t_form form, char **src);
+void				zero_manager(t_form form, char **src,
+					char *new_str, int srclen);
 
 #endif

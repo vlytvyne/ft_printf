@@ -14,13 +14,23 @@
 #include "header.h"
 #include "libft.h"
 
+#define ARGS "%#X\n", 0
+
+void	uprint()
+{
+	printf(ARGS);
+	ft_printf(ARGS);
+}
+
 int		main(void)
 {
-	int *b;
-	b = malloc(10);
-	*b = 10;
-	ft_printf("%#010X\n", 15);
-	printf("%#010X\n", 15);
+	ft_printf(ARGS);
+	printf(ARGS);
+	// int *b;
+	// b = malloc(10);
+	// *b = 10;
+	// ft_printf("%#010X\n", 15);
+	// printf("%#010X\n", 15);
 	// printf("1C:%-5c\n", 'a');
 	// printf("2S:%4.7s\n", "Miami Police");
 	// printf("3S:%4.7s\n", "KO");
@@ -63,5 +73,5 @@ int		main(void)
  //    ft_printf("FT 19S%6.3s\n", "12345678");
 	// printf("X%#.7X\n", 15);
 	// ft_printf("FT X%#.7X\n", 15);
-	//system("leaks a.out");
+	// system("leaks a.out");
 }
