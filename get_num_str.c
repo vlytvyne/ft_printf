@@ -19,7 +19,7 @@ static char	*get_decimal_str(t_form form, va_list args, int base)
 	else if (form.l)
 		return (itoa_base(va_arg(args, long int), base));
 	else if (form.hh)
-		return (itoa_base((char)va_arg(args, int), base));
+		return (itoa_base((signed char)va_arg(args, int), base));
 	else if (form.h)
 		return (itoa_base((short int)va_arg(args, int), base));
 	else
@@ -51,6 +51,18 @@ static char	*get_float_str(t_form form, va_list args)
 			form.precision_set ? form.precision : 6));
 }
 
+static void	hex_small_transformation(char *result)
+{
+	int		i;
+
+	i = 0;
+	while (result[i])
+	{
+		result[i] = ft_tolower(result[i]);
+		i++;
+	}
+}
+
 char		*get_num_str(t_form form, va_list args)
 {
 	char	*result;
@@ -73,10 +85,6 @@ char		*get_num_str(t_form form, va_list args)
 		&& form.precision_set && form.precision == 0)
 		*result = '\0';
 	if (form.type == 'x')
-	{
-		i = -1;
-		while (result[++i])
-			result[i] = ft_tolower(result[i]);
-	}
+		hex_small_transformation(result);
 	return (result);
 }

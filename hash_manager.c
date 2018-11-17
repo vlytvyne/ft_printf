@@ -19,11 +19,11 @@ void	hash_manager(t_form form, char **src)
 	new_str = NULL;
 	if (form.hash)
 	{
-		if (form.type == 'o')
+		if (form.type == 'o' && **src != '0')
 			new_str = ft_strjoin("0", *src);
-		else if (form.type == 'x')
+		else if (form.type == 'x' && **src != '0' && **src != '\0')
 			new_str = ft_strjoin("0x", *src);
-		else if (form.type == 'X')
+		else if (form.type == 'X' && **src != '0' && **src != '\0')
 			new_str = ft_strjoin("0X", *src);
 		else if (form.type == 'f' && form.precision_set && form.precision == 0)
 			new_str = ft_strjoin(*src, ".");

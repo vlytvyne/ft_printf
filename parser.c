@@ -12,6 +12,28 @@
 
 #include "header.h"
 
+static void	check_ll(const char **format, t_form *form)
+{
+	if ((*(*format + 1) == 'l'))
+	{
+		form->ll = 1;
+		(*format)++;
+	}
+	else
+		form->l = 1;
+}
+
+static void	check_hh(const char **format, t_form *form)
+{
+	if ((*(*format + 1) == 'h'))
+	{
+		form->hh = 1;
+		(*format)++;
+	}
+	else
+		form->h = 1;
+}
+
 static void	set_flag(const char **format, t_form *form)
 {
 	if (**format == '#')
@@ -27,15 +49,9 @@ static void	set_flag(const char **format, t_form *form)
 	else if (**format == 'L')
 		form->upper_l = 1;
 	else if (**format == 'l')
-	{
-		form->ll = (*(*format + 1) == 'l' ? 1 : 0);
-		form->l = 1;
-	}
+		check_ll(format, form);
 	else if (**format == 'h')
-	{
-		form->hh = (*(*format + 1) == 'h' ? 1 : 0);
-		form->h = 1;
-	}
+		check_hh(format, form);
 }
 
 static void	set_digit(const char **format, t_form *form)
