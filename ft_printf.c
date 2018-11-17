@@ -39,6 +39,14 @@ void	set_flag(const char **format, t_form *form)
 	}
 }
 
+void	set_digit(const char **format, t_form *form)
+{
+	if (!form->precision_set)
+		form->width = ft_atoi(*format);
+	else
+		form->precision = ft_atoi(*format);
+}
+
 t_form	parse(const char **format)
 {
 	t_form	form;
@@ -55,10 +63,7 @@ t_form	parse(const char **format)
 			set_flag(format, &form);
 		else if (ft_isdigit(**format))
 		{
-			if (!form.precision_set)
-				form.width = ft_atoi(*format);
-			else
-				form.precision = ft_atoi(*format);
+			set_digit(format, &form);
 			while (ft_isdigit(**format))
 				(*format)++;
 			(*format)--;
@@ -70,65 +75,65 @@ t_form	parse(const char **format)
 	return (form);
 }
 
+void	dif_zero_manager(t_form form, char **src, char *new_str, int srclen)
+{
+	int i;
+
+	i = 0;
+	if (form.plus || form.space || **src == '-')
+	{
+		if (**src == '-')
+			new_str[i++] = '-';
+		else if (form.plus)
+			new_str[i++] = '+';
+		else if (form.space)
+			new_str[i++] = ' ';
+		while (i < form.width - srclen + 1)
+			new_str[i++] = '0';
+		ft_strcpy(&new_str[i], (*src + 1));
+	}
+	else
+	{
+		while (i < form.width - srclen)
+			new_str[i++] = '0';
+		ft_strcpy(&new_str[i], *src);
+	}
+	free(*src);
+	*src = new_str;
+}
+
+void	hex_zero_manager(t_form form, char **src, char *new_str, int srclen)
+{
+	int i;
+
+	i = 0;
+	if (form.hash)
+	{
+		new_str[i++] = '0';
+		new_str[i++] = form.type == 'x' ? 'x' : 'X';
+		while (i < form.width - srclen + 2)
+			new_str[i++] = '0';
+		ft_strcpy(&new_str[i], (*src + 2));
+	}
+	else
+	{
+		while (i < form.width - srclen)
+			new_str[i++] = '0';
+		ft_strcpy(&new_str[i], *src);
+	}
+	free(*src);
+	*src = new_str;
+}
+
 void	zero_manager(t_form form, char **src, char *new_str, int srclen)
 {
 	int i;
 
 	i = 0;
 	if (ft_strchr("dif", form.type))
-	{
-		if (form.plus || form.space || **src == '-')
-		{
-			if (**src == '-')
-				new_str[i++] = '-';
-			else if (form.plus)
-				new_str[i++] = '+';
-			else if (form.space)
-				new_str[i++] = ' ';
-			while (i < form.width - srclen + 1)
-			{
-				new_str[i] = '0';
-				i++;
-			}
-			ft_strcpy(&new_str[i], (*src + 1));
-		}
-		else
-		{
-			while (i < form.width - srclen)
-			{
-				new_str[i] = '0';
-				i++;
-			}
-			ft_strcpy(&new_str[i], *src);
-		}
-		free(*src);
-		*src = new_str;
-	}
+		dif_zero_manager(form, src, new_str, srclen);
 	else if ((form.type == 'x' || form.type == 'X'))
-	{
-		if (form.hash)
-		{
-			new_str[i++] = '0';
-			new_str[i++] = 'x';
-			while (i < form.width - srclen + 2)
-			{
-				new_str[i] = '0';
-				i++;
-			}
-			ft_strcpy(&new_str[i], (*src + 2));
-		}
-		else
-		{
-			while (i < form.width - srclen)
-			{
-				new_str[i] = '0';
-				i++;
-			}
-			ft_strcpy(&new_str[i], *src);
-		}
-		free(*src);
-		*src = new_str;
-	}
+		hex_zero_manager(form, src, new_str, srclen);
 	else if (form.type == 'u' || form.type == 'o')
 	{
 		while (i < form.width - srclen)
@@ -142,11 +147,32 @@ void	zero_manager(t_form form, char **src, char *new_str, int srclen)
 	}
 }
 
+void	left_align_manager(char *new_str, char **src, int srclen, int width)
+{
+	ft_strcpy(new_str, *src);
+	while (srclen < width)
+		new_str[srclen++] = ' ';
+	free(*src);
+	*src = new_str;
+}
+
+void	right_align_manager(char *new_str, char **src, int srclen, int width)
+{
+	int		i;
+	int		cpy_from;
+
+	cpy_from = width - srclen;
+	ft_strcpy(new_str + cpy_from, *src);
+	i = 0;
+	while (i < cpy_from)
+		new_str[i++] = ' ';
+	free(*src);
+	*src = new_str;
+}
+
 void	width_manager(t_form form, char **src)
 {
 	int		srclen;
-	int		cpy_from;
-	int		i;
 	int		width;
 	char	*new_str;
 
@@ -156,74 +182,72 @@ void	width_manager(t_form form, char **src)
 		return ;
 	new_str = ft_strnew(width);
 	if (form.minus)
-	{
-		ft_strcpy(new_str, *src);
-		while (srclen < width)
-			new_str[srclen++] = ' ';
-		free(*src);
-		*src = new_str;
-	}
+		left_align_manager(new_str, src, srclen, width);
 	else
 	{
-		if (ft_strchr("diouxXf", form.type) && form.zero && (!form.precision_set || form.type == 'f'))
+		if (ft_strchr("diouxXf", form.type) && form.zero
+			&& (!form.precision_set || form.type == 'f'))
 			zero_manager(form, src, new_str, srclen);
 		else
-		{
-			cpy_from = width - srclen;
-			ft_strcpy(new_str + cpy_from, *src);
-			i = 0;
-			while (i < cpy_from)
-				new_str[i++] = ' ';
-			free(*src);
-			*src = new_str;
-		}
+			right_align_manager(new_str, src, srclen, width);
 	}
+}
+
+void	prec_for_minus(t_form form, char **src)
+{
+	int		size;
+	char	*new_str;
+	char	*beginning;
+
+	size = form.precision - ft_strlen(*src);
+	if (size <= 0)
+		return ;
+	beginning = ft_strnew(size);
+	while (--size >= 0)
+		beginning[size] = '0';
+	new_str = ft_strjoin(beginning, *src);
+	free(*src);
+	free(beginning);
+	*src = new_str;
+}
+
+void	prec_without_minus(t_form form, char **src)
+{
+	int		size;
+	char	*new_str;
+	char	*beginning;
+
+	size = form.precision - ft_strlen(*src) + 2;
+	if (size <= 0)
+		return ;
+	beginning = ft_strnew(size);
+	beginning[0] = '-';
+	while (--size >= 1)
+		beginning[size] = '0';
+	new_str = ft_strjoin(beginning, (*src + 1));
+	free(*src);
+	free(beginning);
+	*src = new_str;
 }
 
 void	precision_manager(t_form form, char **src)
 {
-	char	*new_str;
 	char	*to_free;
 	int		size;
 
-	if (form.type == 's')
+	if (form.type == 's' && form.precision_set
+		&& form.precision < ft_strlen(*src))
 	{
-		if (form.precision_set && form.precision < ft_strlen(*src))
-		{
-			to_free = *src;
-			*src = ft_strsub(*src, 0, form.precision);
-			free(to_free);
-		}
+		to_free = *src;
+		*src = ft_strsub(*src, 0, form.precision);
+		free(to_free);
 	}
 	else if (ft_strchr("diouxX", form.type))
 	{
 		if (**src != '-')
-		{
-			size = form.precision - ft_strlen(*src);
-			if (size <= 0)
-				return ;
-			to_free = ft_strnew(size);
-			while (--size >= 0)
-				to_free[size] = '0';
-			new_str = ft_strjoin(to_free, *src);
-			free(*src);
-			free(to_free);
-			*src = new_str;
-		}
+			prec_for_minus(form, src);
 		else
-		{
-			size = form.precision - ft_strlen(*src) + 2;
-			if (size <= 0)
-				return ;
-			to_free = ft_strnew(size);
-			to_free[0] = '-';
-			while (--size >= 1)
-				to_free[size] = '0';
-			new_str = ft_strjoin(to_free, (*src + 1));
-			free(*src);
-			free(to_free);
-			*src = new_str;
-		}
+			prec_without_minus(form, src);
 	}
 }
 
@@ -232,7 +256,8 @@ void	plus_space_manager(t_form form, char **src)
 	char *new_str;
 	char ch;
 
-	if (ft_strchr("dif", form.type) && (form.space || form.plus) && **src != '-')
+	if (ft_strchr("dif", form.type) &&
+		(form.space || form.plus) && **src != '-')
 	{
 		if (form.plus)
 			new_str = ft_strjoin("+", *src);
@@ -285,6 +310,45 @@ char	*get_pointer_str(va_list args)
 	return (result);
 }
 
+char	*get_decimal_str(t_form form, va_list args, int base)
+{
+	if (form.ll)
+		return (itoa_base(va_arg(args, long long int), base));
+	else if (form.l)
+		return (itoa_base(va_arg(args, long int), base));
+	else if (form.hh)
+		return (itoa_base((char)va_arg(args, int), base));
+	else if (form.h)
+		return (itoa_base((short int)va_arg(args, int), base));
+	else
+		return (itoa_base(va_arg(args, int), base));
+}
+
+char	*get_unsigned_str(t_form form, va_list args, int base)
+{
+	if (form.ll)
+		return (uitoa_base(va_arg(args, unsigned long long int), base));
+	else if (form.l)
+		return (uitoa_base(va_arg(args, unsigned long int), base));
+	else if (form.hh)
+		return (uitoa_base((unsigned char)va_arg(args, unsigned int), base));
+	else if (form.h)
+		return (uitoa_base((unsigned short int)va_arg(args, unsigned int),
+			base));
+	else
+		return (uitoa_base(va_arg(args, unsigned int), base));
+}
+
+char	*get_float_str(t_form form, va_list args)
+{
+	if (form.upper_l)
+		return (ftoa(va_arg(args, long double),
+			form.precision_set ? form.precision : 6));
+	else
+		return (ftoa(va_arg(args, double),
+			form.precision_set ? form.precision : 6));
+}
+
 char	*get_num_str(t_form form, va_list args)
 {
 	char	*result;
@@ -298,48 +362,16 @@ char	*get_num_str(t_form form, va_list args)
 	else
 		base = 10;
 	if (form.type == 'd' || form.type == 'i')
-	{
-		if (form.ll)
-			result = itoa_base(va_arg(args, long long int), base);
-		else if (form.l)
-			result = itoa_base(va_arg(args, long int), base);
-		else if (form.hh)
-			result = itoa_base((char)va_arg(args, int), base);
-		else if (form.h)
-			result = itoa_base((short int)va_arg(args, int), base);
-		else
-			result = itoa_base(va_arg(args, int), base);
-	}
-	else if (form.type == 'u' || form.type == 'o' || form.type == 'x' || form.type == 'X')
-	{
-		if (form.ll)
-			result = uitoa_base(va_arg(args, unsigned long long int), base);
-		else if (form.l)
-			result = uitoa_base(va_arg(args, unsigned long int), base);
-		else if (form.hh)
-			result = uitoa_base((unsigned char)va_arg(args, unsigned int), base);
-		else if (form.h)
-			result = uitoa_base((unsigned short int)va_arg(args, unsigned int), base);
-		else
-			result = uitoa_base(va_arg(args, unsigned int), base);
-	}
+		result = get_decimal_str(form, args, base);
+	else if (ft_strchr("uoxX", form.type))
+		result = get_unsigned_str(form, args, base);
 	else if (form.type == 'f')
-	{
-		if (form.upper_l)
-			result = ftoa(va_arg(args, long double),
-				form.precision_set ? form.precision : 6);
-		else
-			result = ftoa(va_arg(args, double),
-				form.precision_set ? form.precision : 6);
-	}
+		result = get_float_str(form, args);
 	if (form.type == 'x')
 	{
-		i = 0;
-		while (result[i])
-		{
+		i = -1;
+		while (result[++i])
 			result[i] = ft_tolower(result[i]);
-			i++;
-		}
 	}
 	return (result);
 }

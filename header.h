@@ -13,9 +13,8 @@
 #ifndef HEADER_H
 # define HEADER_H
 
-#include <stdio.h>
-#include <stdarg.h>
-#include <stdlib.h>
+# include <stdarg.h>
+# include "libft.h"
 
 # define CONVERSIONS "cspdiouxXf"
 # define FLAGS "hlL#0-+ "
