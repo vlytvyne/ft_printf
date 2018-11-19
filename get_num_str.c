@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "printf.h"
 
 static char	*get_decimal_str(t_form form, va_list args, int base)
 {

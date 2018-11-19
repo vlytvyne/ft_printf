@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "printf.h"
 
 static void	left_align_manager(char *new_str, char **src, int srclen, int width)
 {

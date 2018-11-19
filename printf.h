@@ -1,23 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   header.h                                           :+:      :+:    :+:   */
+/*   printf.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vlytvyne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/13 14:42:53 by vlytvyne          #+#    #+#             */
-/*   Updated: 2018/11/13 14:42:55 by vlytvyne         ###   ########.fr       */
+/*   Updated: 2018/11/19 17:53:22 by vlytvyne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
+#ifndef PRINTF_H
+# define PRINTF_H
 
 # include <stdarg.h>
 # include "libft.h"
 
-# define CONVERSIONS "cspdiouxXfb"
+# define CONVERSIONS "cspdiouxXfbt"
 # define FLAGS "hlL#0-+ "
+
+# define RED "\x1b[31m"
+# define GREEN "\x1b[32m"
+# define YELLOW "\x1b[33m"
+# define BLUE "\x1b[34m"
+# define MAGENTA "\x1b[35m"
+# define CYAN "\x1b[36m"
+# define WHITE "\x1b[37m"
+# define B_RED "\x1b[31;1m"
+# define B_GREEN "\x1b[32;1m"
+# define B_YELLOW "\x1b[33;1m"
+# define B_BLUE "\x1b[34;1m"
+# define B_MAGENTA "\x1b[35;1m"
+# define B_CYAN "\x1b[36;1m"
+# define B_WHITE "\x1b[37;1m"
+# define EOC "\x1b[0m"
 
 typedef struct		s_form
 {
@@ -46,5 +62,8 @@ void				hash_manager(t_form form, char **src);
 void				plus_space_manager(t_form form, char **src);
 void				zero_manager(t_form form, char **src,
 					char *new_str, int srclen);
+int					set_color(va_list args);
+char				*get_char_str(va_list args);
+char				*get_pointer_str(va_list args);
 
 #endif

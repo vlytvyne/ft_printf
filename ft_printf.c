@@ -10,27 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "printf.h"
 
-static char	*get_pointer_str(va_list args)
-{
-	int		i;
-	char	*tmp;
-	char	*result;
-
-	i = 0;
-	tmp = itoa_base(va_arg(args, long long unsigned int), 16);
-	while (tmp[i])
-	{
-		tmp[i] = ft_tolower(tmp[i]);
-		i++;
-	}
-	result = ft_strjoin("0x", tmp);
-	free(tmp);
-	return (result);
-}
-
-void		run_managers(t_form form, char **result)
+static void	run_managers(t_form form, char **result)
 {
 	precision_manager(form, result);
 	plus_space_manager(form, result);
@@ -45,11 +27,10 @@ static int	dispatcher(t_form form, va_list args)
 
 	if (!ft_strchr(CONVERSIONS, form.type))
 		return (0);
+	if (form.type == 't')
+		return (set_color(args));
 	if (form.type == 'c')
-	{
-		result = ft_strnew(1);
-		*result = va_arg(args, int);
-	}
+		result = get_char_str(args);
 	else if (form.type == 's')
 	{
 		result = ft_strdup(va_arg(args, char*));

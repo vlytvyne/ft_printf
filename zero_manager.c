@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "printf.h"
 
 static void	dif_zero_manager(t_form form, char **src, char *new_str, int srclen)
 {

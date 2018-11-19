@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "printf.h"
 
 void	hash_manager(t_form form, char **src)
 {
