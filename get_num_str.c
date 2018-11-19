@@ -67,8 +67,8 @@ char		*get_num_str(t_form form, va_list args)
 {
 	char	*result;
 	int		base;
-	int		i;
 
+	result = NULL;
 	if (form.type == 'o')
 		base = 8;
 	else if (form.type == 'x' || form.type == 'X')
@@ -81,6 +81,9 @@ char		*get_num_str(t_form form, va_list args)
 		result = get_unsigned_str(form, args, base);
 	else if (form.type == 'f')
 		result = get_float_str(form, args);
+	else if (form.type == 'b')
+		result = btoa(va_arg(args, long long int),
+			form.precision_set ? form.precision : 1);
 	if (*result == '0' && form.type != 'f'
 		&& form.precision_set && form.precision == 0)
 		*result = '\0';

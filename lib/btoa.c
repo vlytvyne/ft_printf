@@ -1,29 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   plus_space_manager.c                               :+:      :+:    :+:   */
+/*   btoa.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vlytvyne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/17 17:50:33 by vlytvyne          #+#    #+#             */
-/*   Updated: 2018/11/17 17:50:35 by vlytvyne         ###   ########.fr       */
+/*   Created: 2018/10/23 20:59:31 by vlytvyne          #+#    #+#             */
+/*   Updated: 2018/11/19 12:39:44 by vlytvyne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "libft.h"
 
-void	plus_space_manager(t_form form, char **src)
+char	*btoa(long long int num, unsigned int bytes)
 {
-	char *new_str;
+	long long int	binary;
+	int				till;
+	int				i;
+	char			*str;
 
-	if (ft_strchr("dif", form.type) &&
-		(form.space || form.plus) && **src != '-')
+	if (bytes > 8)
+		bytes = 8;
+	i = 0;
+	binary = 1;
+	till = bytes * 8;
+	str = ft_strnew(till);
+	while (i < till)
 	{
-		if (form.plus)
-			new_str = ft_strjoin("+", *src);
+		if (binary & num)
+			str[till - i - 1] = '1';
 		else
-			new_str = ft_strjoin(" ", *src);
-		free(*src);
-		*src = new_str;
+			str[till - i - 1] = '0';
+		binary = binary << 1;
+		i++;
 	}
+	return (str);
 }

@@ -16,7 +16,7 @@
 # include <stdarg.h>
 # include "libft.h"
 
-# define CONVERSIONS "cspdiouxXf"
+# define CONVERSIONS "cspdiouxXfb"
 # define FLAGS "hlL#0-+ "
 
 typedef struct		s_form

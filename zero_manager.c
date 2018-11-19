@@ -14,7 +14,7 @@
 
 static void	dif_zero_manager(t_form form, char **src, char *new_str, int srclen)
 {
-	int i;
+	unsigned int i;
 
 	i = 0;
 	if (form.plus || form.space || **src == '-')
@@ -41,7 +41,7 @@ static void	dif_zero_manager(t_form form, char **src, char *new_str, int srclen)
 
 static void	hex_zero_manager(t_form form, char **src, char *new_str, int srclen)
 {
-	int i;
+	unsigned int i;
 
 	i = 0;
 	if (form.hash)
@@ -64,7 +64,7 @@ static void	hex_zero_manager(t_form form, char **src, char *new_str, int srclen)
 
 void		zero_manager(t_form form, char **src, char *new_str, int srclen)
 {
-	int i;
+	unsigned int i;
 
 	i = 0;
 	if (ft_strchr("dif", form.type))

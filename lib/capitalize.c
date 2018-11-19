@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   plus_space_manager.c                               :+:      :+:    :+:   */
+/*   capitalize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vlytvyne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/17 17:50:33 by vlytvyne          #+#    #+#             */
-/*   Updated: 2018/11/17 17:50:35 by vlytvyne         ###   ########.fr       */
+/*   Created: 2018/10/24 10:18:19 by vlytvyne          #+#    #+#             */
+/*   Updated: 2018/10/24 10:21:50 by vlytvyne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "libft.h"
 
-void	plus_space_manager(t_form form, char **src)
+void	capitalize(char *str)
 {
-	char *new_str;
+	int	i;
 
-	if (ft_strchr("dif", form.type) &&
-		(form.space || form.plus) && **src != '-')
+	i = 1;
+	if (str == NULL)
+		return ;
+	str[0] = ft_toupper(str[0]);
+	while (str[i])
 	{
-		if (form.plus)
-			new_str = ft_strjoin("+", *src);
+		if (is_whitespace(str[i - 1]))
+			str[i] = ft_toupper(str[i]);
 		else
-			new_str = ft_strjoin(" ", *src);
-		free(*src);
-		*src = new_str;
+			str[i] = ft_tolower(str[i]);
+		i++;
 	}
 }

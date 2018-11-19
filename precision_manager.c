@@ -52,7 +52,6 @@ static void	prec_without_minus(t_form form, char **src)
 void		precision_manager(t_form form, char **src)
 {
 	char	*to_free;
-	int		size;
 
 	if (form.type == 's' && form.precision_set
 		&& form.precision < ft_strlen(*src))

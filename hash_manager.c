@@ -27,6 +27,8 @@ void	hash_manager(t_form form, char **src)
 			new_str = ft_strjoin("0X", *src);
 		else if (form.type == 'f' && form.precision_set && form.precision == 0)
 			new_str = ft_strjoin(*src, ".");
+		else if (form.type == 's')
+			capitalize(*src);
 		if (new_str != NULL)
 		{
 			free(*src);

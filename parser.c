@@ -66,7 +66,7 @@ t_form		parse(const char **format)
 {
 	t_form	form;
 
-	form = (t_form){0};
+	form = (t_form){0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	while (**format)
 	{
 		if (ft_isalpha(**format) && **format != 'h' && **format != 'l'

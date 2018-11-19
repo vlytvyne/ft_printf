@@ -15,7 +15,6 @@
 static char	*get_pointer_str(va_list args)
 {
 	int		i;
-	int		size;
 	char	*tmp;
 	char	*result;
 
@@ -59,7 +58,7 @@ static int	dispatcher(t_form form, va_list args)
 	}
 	else if (form.type == 'p')
 		result = get_pointer_str(args);
-	else if (ft_strchr("diouxXf", form.type))
+	else if (ft_strchr("diouxXfb", form.type))
 		result = get_num_str(form, args);
 	run_managers(form, &result);
 	ft_putstr(result);
