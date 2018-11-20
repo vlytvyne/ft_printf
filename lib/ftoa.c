@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
 static long double	fabs(long double num)
 {
@@ -37,10 +36,10 @@ static void			fill_zeros(char *str, char *itoa_ret, int precision)
 
 char				*ftoa(long double num, unsigned int precision)
 {
-	int			ip;
-	long double	fp;
-	char		*str;
-	char		*itoa_ret;
+	long long int	ip;
+	long double		fp;
+	char			*str;
+	char			*itoa_ret;
 
 	str = ft_strnew(30);
 	if (num < 0)
@@ -48,7 +47,7 @@ char				*ftoa(long double num, unsigned int precision)
 		ft_strcat(str, "-");
 		num = fabs(num);
 	}
-	ip = (int)num;
+	ip = (long long int)num;
 	fp = num - ip;
 	itoa_ret = ft_itoa(ip);
 	cat_free(str, itoa_ret);

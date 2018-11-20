@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int		power(int num, int pow)
+int		power(long long int num, int pow)
 {
-	int multiplier;
+	long long int multiplier;
 
 	multiplier = num;
 	if (pow == 0 || num == 1)

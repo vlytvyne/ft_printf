@@ -12,6 +12,18 @@
 
 #include "printf.h"
 
+static int	check_ending(char *src)
+{
+	if (*src == '\0')
+		return (0);
+	while (*src)
+		src++;
+	src--;
+	if (*src == '0')
+		return (0);
+	return (1);
+}
+
 void	hash_manager(t_form form, char **src)
 {
 	char *new_str;
@@ -21,9 +33,9 @@ void	hash_manager(t_form form, char **src)
 	{
 		if (form.type == 'o' && **src != '0')
 			new_str = ft_strjoin("0", *src);
-		else if (form.type == 'x' && **src != '0' && **src != '\0')
+		else if (form.type == 'x' && check_ending(*src))
 			new_str = ft_strjoin("0x", *src);
-		else if (form.type == 'X' && **src != '0' && **src != '\0')
+		else if (form.type == 'X' && check_ending(*src))
 			new_str = ft_strjoin("0X", *src);
 		else if (form.type == 'f' && form.precision_set && form.precision == 0)
 			new_str = ft_strjoin(*src, ".");

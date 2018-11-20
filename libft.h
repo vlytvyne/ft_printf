@@ -78,7 +78,7 @@ char				*ft_strsub(char const *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
 char				*ft_strtrim(char const *s);
 char				**ft_strsplit(char const *s, char c);
-char				*ft_itoa(int n);
+char				*ft_itoa(long long int n);
 
 t_list				*ft_lstnew(void const *content, size_t content_size);
 void				ft_lstdelone(t_list **alst, void (*del)(void*, size_t));
@@ -88,7 +88,7 @@ void				ft_lstiter(t_list *lst, void (*f)(t_list*));
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list*));
 
 void				lst_add_end(t_list *root, t_list *new);
-int					power(int num, int pow);
+int					power(long long int num, int pow);
 char				*strrev(char *str);
 int					is_whitespace(char c);
 int					get_abs(int num);
