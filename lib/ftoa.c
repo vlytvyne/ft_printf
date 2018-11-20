@@ -50,13 +50,13 @@ char				*ftoa(long double num, unsigned int precision)
 	}
 	ip = (int)num;
 	fp = num - ip;
-	itoa_ret = itoa_base(ip, 10);
+	itoa_ret = ft_itoa(ip);
 	cat_free(str, itoa_ret);
 	if (precision != 0)
 	{
 		ft_strcat(str, ".");
 		fp = fp * power(10, precision);
-		itoa_ret = (float)fp == (int)fp + 1 ? ft_itoa(fp + 1) : ft_itoa(fp);
+		itoa_ret = fp - (int)fp >= 0.5 ? ft_itoa(fp + 1) : ft_itoa(fp);
 		fill_zeros(str, itoa_ret, precision);
 		cat_free(str, itoa_ret);
 	}
