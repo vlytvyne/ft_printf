@@ -6,7 +6,7 @@
 /*   By: vlytvyne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 12:51:55 by vlytvyne          #+#    #+#             */
-/*   Updated: 2018/11/19 12:40:02 by vlytvyne         ###   ########.fr       */
+/*   Updated: 2018/11/21 16:45:45 by vlytvyne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void				ft_lstiter(t_list *lst, void (*f)(t_list*));
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list*));
 
 void				lst_add_end(t_list *root, t_list *new);
-int					power(long long int num, int pow);
+long long int		power(long long int num, int pow);
 char				*strrev(char *str);
 int					is_whitespace(char c);
 int					get_abs(int num);

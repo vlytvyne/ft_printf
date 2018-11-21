@@ -6,11 +6,11 @@
 /*   By: vlytvyne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 12:15:46 by vlytvyne          #+#    #+#             */
-/*   Updated: 2018/11/16 12:34:06 by vlytvyne         ###   ########.fr       */
+/*   Updated: 2018/11/21 16:45:09 by vlytvyne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		power(long long int num, int pow)
+long long int	power(long long int num, int pow)
 {
 	long long int multiplier;
 
