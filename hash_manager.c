@@ -6,7 +6,7 @@
 /*   By: vlytvyne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/17 17:51:06 by vlytvyne          #+#    #+#             */
-/*   Updated: 2018/11/17 17:51:08 by vlytvyne         ###   ########.fr       */
+/*   Updated: 2018/11/27 13:26:25 by vlytvyne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	check_ending(char *src)
 	return (1);
 }
 
-void	hash_manager(t_form form, char **src)
+void		hash_manager(t_form form, char **src)
 {
 	char *new_str;
 
