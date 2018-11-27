@@ -27,6 +27,8 @@ static int	dispatcher(t_form form, va_list args)
 
 	if (!ft_strchr(CONVERSIONS, form.type))
 		return (0);
+	if (form.type == 'q')
+		return (print_list(form, args));
 	if (form.type == 't')
 		return (set_color(args));
 	else if (form.type == 'c')

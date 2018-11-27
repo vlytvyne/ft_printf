@@ -17,7 +17,7 @@
 # include <time.h>
 # include "libft.h"
 
-# define CONVERSIONS "cspdiouxXfbtw"
+# define CONVERSIONS "cspdiouxXfbtwq"
 # define FLAGS "hlL#0-+ "
 
 # define RED "\x1b[31m"
@@ -68,5 +68,6 @@ char				*get_char_str(va_list args);
 char				*get_pointer_str(va_list args);
 char				*get_timestamp(void);
 char				*get_str(va_list args);
+int					print_list(t_form form, va_list args);
 
 #endif

@@ -22,7 +22,8 @@ lib/ft_strchr.c lib/ft_strcpy.c lib/ft_strdup.c lib/ft_strjoin.c \
 lib/ft_strlen.c lib/ft_strnew.c lib/ft_strsub.c lib/ft_tolower.c \
 lib/ft_tolower.c lib/ftoa.c lib/is_whitespace.c lib/itoa_base.c \
 lib/uitoa_base.c lib/ft_itoa.c lib/ft_bzero.c lib/ft_strcat.c \
-lib/ft_toupper.c lib/get_abs.c lib/power.c lib/ft_strequ.c lib/ft_strsub.c
+lib/ft_toupper.c lib/get_abs.c lib/power.c lib/ft_strequ.c lib/ft_strsub.c \
+lib/ft_lstiter.c lib/ft_putnbr.c print_list.c
 
 OBJ = $(SRC:.c=.o)
 
