@@ -41,6 +41,8 @@ void	hash_manager(t_form form, char **src)
 			new_str = ft_strjoin(*src, ".");
 		else if (form.type == 's')
 			capitalize(*src);
+		else if (form.type == 'w')
+			new_str = ft_strsub(*src, 11, 8);
 		if (new_str != NULL)
 		{
 			free(*src);

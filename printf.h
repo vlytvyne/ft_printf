@@ -14,9 +14,10 @@
 # define PRINTF_H
 
 # include <stdarg.h>
+# include <time.h>
 # include "libft.h"
 
-# define CONVERSIONS "cspdiouxXfbt"
+# define CONVERSIONS "cspdiouxXfbtw"
 # define FLAGS "hlL#0-+ "
 
 # define RED "\x1b[31m"
@@ -65,5 +66,7 @@ void				zero_manager(t_form form, char **src,
 int					set_color(va_list args);
 char				*get_char_str(va_list args);
 char				*get_pointer_str(va_list args);
+char				*get_timestamp(void);
+char				*get_str(va_list args);
 
 #endif

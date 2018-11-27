@@ -62,3 +62,21 @@ char	*get_pointer_str(va_list args)
 	free(tmp);
 	return (result);
 }
+
+char	*get_timestamp(void)
+{
+	time_t t;
+
+	t = time(NULL);
+	return (ft_strdup(ctime(&t)));
+}
+
+char	*get_str(va_list args)
+{
+	char	*result;
+
+	result = ft_strdup(va_arg(args, char*));
+	if (result == NULL)
+		result = ft_strdup("(null)");
+	return (result);
+}

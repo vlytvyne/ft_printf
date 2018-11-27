@@ -29,14 +29,12 @@ static int	dispatcher(t_form form, va_list args)
 		return (0);
 	if (form.type == 't')
 		return (set_color(args));
-	if (form.type == 'c')
+	else if (form.type == 'c')
 		result = get_char_str(args);
+	else if (form.type == 'w')
+		result = get_timestamp();
 	else if (form.type == 's')
-	{
-		result = ft_strdup(va_arg(args, char*));
-		if (result == NULL)
-			result = ft_strdup("(null)");
-	}
+		result = get_str(args);
 	else if (form.type == 'p')
 		result = get_pointer_str(args);
 	else if (ft_strchr("diouxXfb", form.type))
