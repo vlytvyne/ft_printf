@@ -71,7 +71,7 @@ void		zero_manager(t_form form, char **src, char *new_str, int srclen)
 		dif_zero_manager(form, src, new_str, srclen);
 	else if ((form.type == 'x' || form.type == 'X'))
 		hex_zero_manager(form, src, new_str, srclen);
-	else if (form.type == 'u' || form.type == 'o')
+	else if (form.type == 'u' || form.type == 'o' || form.type == 'c')
 	{
 		while (i < form.width - srclen)
 		{

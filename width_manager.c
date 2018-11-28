@@ -51,7 +51,7 @@ void		width_manager(t_form form, char **src)
 		left_align_manager(new_str, src, srclen, width);
 	else
 	{
-		if (ft_strchr("diouxXf", form.type) && form.zero
+		if (ft_strchr("diouxXfc", form.type) && form.zero
 			&& (!form.precision_set || form.type == 'f'))
 			zero_manager(form, src, new_str, srclen);
 		else

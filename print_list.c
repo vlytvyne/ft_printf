@@ -31,10 +31,7 @@ int			print_list(t_form form, va_list args)
 
 	list = va_arg(args, t_list*);
 	if (form.hash == 1)
-	{
-		ft_putstr("KKK");
 		ft_lstiter(list, print_list_int);
-	}
 	else
 		ft_lstiter(list, print_list_str);
 	return (0);
